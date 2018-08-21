@@ -64,11 +64,47 @@ testx = np.asarray(testx, dtype=np.float32)
 x = tf.placeholder(tf.float32, [None,2])
 y = tf.placeholder(tf.float32, [None,2])
 
-#define a simple NN
-W = tf.Variable(tf.random_normal([2,2]))
-b = tf.Variable(tf.zeros([2]))
-eta = tf.matmul(x,W)+b
-prediction = tf.nn.softmax(tf.matmul(x,W)+b)
+
+
+#initialize weight
+def weight_variable(shape):
+    initial = tf.truncated_normal(shape,stddev=0.1)
+    return tf.Variable(initial)
+
+#initialize bias
+def bias_variable(shape):
+    initial = tf.constant(0.1,shape=shape)
+    return tf.Variable(initial)
+
+
+
+#initialize the 1st layer
+W_1 = weight_variable([2,10])
+b1 = bias_variable([10])
+s1 = tf.nn.softmax(tf.matmul(x,W_1)+b1)
+
+
+
+#initialize the 2nd layer
+W_2 = weight_variable([10,10])
+b2 = bias_variable([10])
+s2 = tf.nn.softmax(tf.matmul(s1,W_2)+b2)
+
+
+#initialize the 3rd layer
+W_3 = weight_variable([10, 2])
+b3 = bias_variable([2])
+eta = tf.matmul(s2,W_3)+b3
+prediction = tf.nn.softmax(eta)
+
+
+
+
+
+
+
+
+
 
 #quadratic cost function
 loss = tf.reduce_mean(tf.square(y-prediction))
