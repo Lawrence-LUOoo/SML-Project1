@@ -59,7 +59,10 @@ def similaritybetweeneachsourcewheresinkexist_comparetosource(sourceinput, sinki
     term = 1
     for j in range(2):
         term = term * length_orderlist
-        listforgan.append(term)
+        if (length_orderlist > 0):
+            listforgan.append((1.0/term))
+        else:
+            listforgan.append(1.0)
     if (sourcefollowedbysink == 1):
         listforgan.append(1)
     else :
