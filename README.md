@@ -2,16 +2,16 @@
 
 # Object file
 
-similaritycompare/outputdataid.py generate 5 python object files:
-sourcedatalength.obj is the number of sources in train dataset
-sinkdatalength.obj is the number of distinct sinks in train dataset
-sourcedataidlist.obj is a hash table for source IDs in train dataset
-sinkdataidlist.obj is a hash table for sink IDs in train dataset
-source2sinkdata.obj read each row of sinks into list, one element in the list is one row, each row's correspond source is same as the source order in sourcedataidlist.obj
+similaritycompare/outputdataid.py generate 5 python object files: \n
+sourcedatalength.obj is the number of sources in train dataset \n
+sinkdatalength.obj is the number of distinct sinks in train dataset \n
+sourcedataidlist.obj is a hash table for source IDs in train dataset \n
+sinkdataidlist.obj is a hash table for sink IDs in train dataset \n
+source2sinkdata.obj read each row of sinks into list, one element in the list is one row, each row's correspond source is same as the source order in sourcedataidlist.obj \n
 
 
-source2sinktwodimensiontraindata.py generate one python object files:
-twodimentiondatafile.obj is a list of edges in the train dataset
+source2sinktwodimensiontraindata.py generate one python object files: \n
+twodimentiondatafile.obj is a list of edges in the train dataset \n
 
 
 
