@@ -10,7 +10,7 @@ tf.set_random_seed(1)
 np.random.seed(1)
 
 # Hyper Parameters
-BATCH_SIZE = 10
+BATCH_SIZE = 200
 LR_G = 0.001           # learning rate for generator
 LR_D = 0.001           # learning rate for discriminator
 N_IDEAS = 10             # think of this as number of ideas for generating an art work (Generator)
