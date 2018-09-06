@@ -9,7 +9,7 @@ tf.set_random_seed(1)
 np.random.seed(1)
 
 # Hyper Parameters
-BATCH_SIZE = 200
+BATCH_SIZE = 300
 LR_G = 0.001           # learning rate for generator
 LR_D = 0.001           # learning rate for discriminator
 N_IDEAS = 10             # think of this as number of ideas for generating an art work (Generator)
@@ -107,16 +107,19 @@ def similaritybetweeneachsourcewheresinkexist_comparetosource_fortrain(sourceinp
 
 with tf.variable_scope('Generator'):
     G_in = tf.placeholder(tf.float32, [None, N_IDEAS])          # random ideas (could from normal distribution)
-    G_l1 = tf.layers.dense(G_in, 32, tf.nn.relu)
-    G_out = tf.layers.dense(G_l1, number_of_useorders, tf.nn.sigmoid)               # making a orderlist from these random ideas
+    G_l2 = tf.layers.dense(G_in, 32, tf.nn.relu)
+    G_l1 = tf.layers.dense(G_l2, 32, tf.nn.relu)
+    G_out = tf.layers.dense(G_l1, number_of_useorders)               # making a orderlist from these random ideas
 
 with tf.variable_scope('Discriminator'):
     real_order = tf.placeholder(tf.float32, [None, number_of_useorders], name='real_in')   # receive order from the real data
-    D_l0 = tf.layers.dense(real_order, 32, tf.nn.relu, name='l')
-    prob_orderreal0 = tf.layers.dense(D_l0, 1, name='out')              # probability that the order is real
+    D_l0 = tf.layers.dense(real_order, 8, tf.nn.relu, name='l')
+    D_l0_1 = tf.layers.dense(D_l0, 4, tf.nn.relu, name='l1')
+    prob_orderreal0 = tf.layers.dense(D_l0_1, 1, tf.nn.sigmoid, name='out')              # probability that the order is real
     # reuse layers for generator
-    D_l1 = tf.layers.dense(G_out, 32, tf.nn.relu, name='l', reuse=True)            # receive art work from a newbie like G
-    prob_orderreal1 = tf.layers.dense(D_l1, 1, name='out', reuse=True)  # probability that the order is real
+    D_l1 = tf.layers.dense(G_out, 8, tf.nn.relu, name='l', reuse=True)            # receive art work from a newbie like G
+    D_l1_1 = tf.layers.dense(D_l1, 4, tf.nn.relu, name='l1', reuse=True)            # receive art work from a newbie like G
+    prob_orderreal1 = tf.layers.dense(D_l1_1, 1, tf.nn.sigmoid, name='out', reuse=True)  # probability that the order is real
 
 D_loss = -tf.reduce_mean(tf.log(prob_orderreal0) + tf.log(1-prob_orderreal1))
 G_loss = tf.reduce_mean(tf.log(1-prob_orderreal1))
@@ -146,7 +149,7 @@ for step in range(50000):
         batch_real.append(similaritybetweeneachsourcewheresinkexist_comparetosource_fortrain(pair[0], pair[1], source2sinkdata, sourcedata))
     print(batch_real)
     print("epoch start train")
-    for iter in range(40):
+    for iter in range(20):
         sess.run([train_D, train_G], {G_in: G_ideas, real_order: batch_real})
     print("test start")
     prediction_test = sess.run(prob_orderreal0, {real_order: testsimlist})
